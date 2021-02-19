@@ -16,35 +16,43 @@ public class SecondActivity extends AppCompatActivity {
     String TAG = "SecondActivity";
     ImageButton firstImage;
     ImageButton secondImage;
+    public static final int REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
-        Intent intentIn = getIntent();
-        Intent intentOut = new Intent(this, MainActivity.class);
-
 
         Log.i(TAG, "Second activity started");
 
+        // define intents
+        Intent intentIn = getIntent();
+
+
+        // instantiate views
         displayView = findViewById(R.id.display_user_input);
         displayText = String.format("Hello, %s! Please choose a background.",intentIn.getStringExtra("input"));
         displayView.setText(displayText);
-
         firstImage = findViewById(R.id.image_first);
         secondImage = findViewById(R.id.image_second);
+
+        // set click listeners
         firstImage.setOnClickListener(firstListener -> {
             Log.i(TAG, "First image selected"); //debug
-            intentOut.putExtra("image_id",R.drawable.supermoon);
-            startActivity(intentOut);
+            chooseBackground(R.drawable.supermoon);
         });
         secondImage.setOnClickListener(secondListener -> {
             Log.i(TAG, "Second image selected"); //debug
-            intentOut.putExtra("image_id",R.drawable.waterfall);
-            startActivity(intentOut);
+            chooseBackground(R.drawable.waterfall);
         });
+    }
 
-
+    // sets background and returns to main activity
+    private void chooseBackground(int backgroundID) {
+        Intent intentOut = new Intent(this, MainActivity.class);
+        intentOut.putExtra("image_id", backgroundID);
+        setResult(RESULT_OK, intentOut);
+        finish();
     }
 
 }
